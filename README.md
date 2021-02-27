@@ -1,0 +1,1 @@
+# Magisterka_Dawid_Jankowski
