@@ -1,0 +1,23 @@
+<ul class="sidebar-menu" data-widget="tree">
+	<li class="header">MAIN MENU</li>
+	<li {% if _route in ['app_messenger', 'app_messenger_home'] %}class='active'{% endif %}>
+		<a href="{{ path('app_messenger') }}">
+			<i class="fa fa-comments-o"></i>
+			<span>Komunikator</span>
+		</a>
+	</li>
+	{% if is_granted('ROLE_ADMIN') %}
+		<li {% if _route in ['app_users_list', 'app_users_edit'] %}class='active'{% endif %}>
+			<a href="{{ path('app_users_list') }}">
+				<i class="fa fa-users"></i>
+				<span>Użytkownicy</span>
+			</a>
+		</li>
+	{% endif %}
+	<li {% if _route in ['app_tasks_list', 'app_tasks_edit', 'app_tasks_change_status'] %}class='active'{% endif %}>
+		<a href="{{ path('app_tasks_list') }}">
+			<i class="fa fa-calendar"></i>
+			<span>Zadania</span>
+		</a>
+	</li>
+</ul>

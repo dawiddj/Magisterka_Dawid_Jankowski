@@ -1,0 +1,117 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Lista użytkowników</h3>
+				</div>
+				<div class="box-body">
+					<a href="{{ path('app_users_edit') }}" class="btn btn-default">
+						<i class="fa fa-fw fa-user-plus"></i> &nbsp; DODAJ UŻYTKOWNIKA
+					</a>
+
+					<br/><br/>
+
+					<table class="table table-bordered table-striped" style="margin-top: 12px;" id="usersTable">
+						<thead>
+							<tr>
+								<th style="width: 10px">ID</th>
+								<th>Nazwa użytkownika</th>
+								<th>Imię i nazwisko</th>
+								<th>Typ użytkownika</th>
+								<th>Utworzony</th>
+								<th>Ostatnio zalogowany</th>
+								<th>Akcja</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% if users is defined and users is not empty %}
+								{% for user in users %}
+									<tr>
+										<td>
+											{{ user.id }}
+										</td>
+										<td>
+											{{ user.username }}
+										</td>
+										<td>
+											{{ user.firstName }} {{ user.lastName }}
+										</td>
+										<td>
+											{% if 'ROLE_ADMIN' in user.roles %}
+												ADMINISTRATOR
+											{% else %}
+												STUDENT
+											{% endif %}
+										</td>
+										<td>
+											{{ user.createdAt ? user.createdAt | date('Y-m-d H:i:s') : '----' }}
+										</td>
+										<td>
+											{{ user.lastLoggedAt ? user.lastLoggedAt | date('Y-m-d H:i:s') : '----'  }}
+										</td>
+										<td>
+											<a href="{{ path('app_users_edit', {'id' : user.id}) }}" class="btn btn-default">
+												<i class="fa fa-fw fa-edit"></i> EDYTUJ
+											</a>
+
+											<a href="{{ path('app_users_delete', {'id' : user.id}) }}" class="btn btn-success">
+												<i class="fa fa-fw fa-remove"></i> USUŃ
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr>
+									<td colspan="20">
+										Brak użytkowników w bazie.
+									</td>
+								</tr>
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $('#usersTable').dataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf'
+                ],
+                "language": {
+                    "processing":     "Przetwarzanie...",
+                    "search":         "Szukaj:",
+                    "lengthMenu":     "Pokaż _MENU_ pozycji",
+                    "info":           "Użytkownicy od _START_ do _END_ z _TOTAL_ łącznie",
+                    "infoEmpty":      "Użytkownicy 0 z 0 istniejących",
+                    "infoFiltered":   "(filtrowanie spośród _MAX_ dostępnych użytkowników)",
+                    "infoPostFix":    "",
+                    "loadingRecords": "Wczytywanie...",
+                    "zeroRecords":    "Nie znaleziono użytkowników",
+                    "emptyTable":     "Brak danych",
+                    "paginate": {
+                        "first":      "Pierwsza",
+                        "previous":   "Poprzednia",
+                        "next":       "Następna",
+                        "last":       "Ostatnia"
+                    },
+                    "aria": {
+                        "sortAscending": ": aktywuj, by posortować kolumnę rosnąco",
+                        "sortDescending": ": aktywuj, by posortować kolumnę malejąco"
+                    }
+                }
+		    });
+		});
+	</script>
+{% endblock %}

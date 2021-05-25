@@ -1,0 +1,76 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<form class="form-horizontal" action="{{ path('app_tasks_change_status', {'id':formTask.id ?? null}) }}" method="POST">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							ZMIANA STATUSU TASKA
+						</h3>
+					</div>
+					<div class="box-body">
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.name) }}
+							</div>
+							<div class="col-sm-8">
+								{{ formTask.name }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.description) }}
+							</div>
+							<div class="col-sm-8">
+								{{ formTask.description | raw }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.status) }}
+							</div>
+							<div class="col-sm-4">
+								{{ form_widget(form.status) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.progress) }}
+							</div>
+							<div class="col-sm-4">
+								{{ form_widget(form.progress) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.finishedAt) }}
+							</div>
+							<div class="col-sm-3">
+								{{ form_widget(form.finishedAt) }}
+							</div>
+						</div>
+					</div>
+					<div class="box-footer">
+						<a href="{{ path('app_tasks_list') }}" type="submit" class="btn btn-default pull-right">Anuluj</a>
+						&nbsp; &nbsp;
+						<button type="submit" class="btn btn-info pull-right">Zapisz</button>
+					</div>
+
+					{{ form_widget(form._token) }}
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+            $('#task_description').wysihtml5();
+		})
+	</script>
+{% endblock %}

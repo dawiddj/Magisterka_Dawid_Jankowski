@@ -1,0 +1,101 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<form enctype="multipart/form-data" class="form-horizontal" action="{{ path('app_tasks_editor', {'id':task.id ?? null}) }}" method="POST">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+							{% if task is not empty %}EDYCJA{% else %}TWORZENIE NOWEGO{% endif %} ZADANIA
+						</h3>
+					</div>
+					<div class="box-body">
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.name) }}
+							</div>
+							<div class="col-sm-8">
+								{{ form_widget(form.name) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.description) }}
+							</div>
+							<div class="col-sm-8">
+								{{ form_widget(form.description) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.assignedTo) }}
+							</div>
+							<div class="col-sm-4">
+								{{ form_widget(form.assignedTo) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.deadlineAt) }}
+							</div>
+							<div class="col-sm-4">
+								{{ form_widget(form.deadlineAt) }}
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 text-right">
+								{{ form_label(form.files) }}
+							</div>
+							<div class="col-sm-4">
+								{{ form_widget(form.files) }}
+							</div>
+						</div>
+						{% if task.id is not null %}
+							<div class="form-group">
+								<div class="col-sm-2 text-right">
+									<label>Lista załączonych plików</label>
+								</div>
+								<div class="col-sm-10">
+									{% if task.files is not empty %}
+										{% for taskFile in task.files %}
+										<div class="col-md-12">
+											<a href="{{ path('app_display_file', {'hash': taskFile.hash}) }}" target="_blank">
+												{% if taskFile.mimeType starts with 'image' %}
+													<img src="{{ asset('dist/img/icons/image.png') }}" />
+												{% else %}
+												<img src="{{ asset('dist/img/icons/document.png') }}" />
+													{% endif %}
+												{{ taskFile.fileName }}
+											</a>
+										</div>
+										{% endfor %}
+									{% else %}
+
+									{% endif %}
+								</div>
+							</div>
+						{% endif %}
+					</div>
+					<div class="box-footer">
+						<a href="{{ path('app_tasks_list') }}" type="submit" class="btn btn-default pull-right">Anuluj</a>
+						&nbsp; &nbsp;
+						<button type="submit" class="btn btn-info pull-right">Zapisz</button>
+					</div>
+
+					{{ form_widget(form._token) }}
+				</form>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+            $('#{{ form.description.vars.id }}').wysihtml5();
+		})
+	</script>
+{% endblock %}

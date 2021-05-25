@@ -1,0 +1,141 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Lista zadań</h3>
+				</div>
+				<div class="box-body">
+					{% if is_granted('ROLE_ADMIN') %}
+						<a href="{{ path('app_tasks_editor') }}" class="btn btn-default">
+							<i class="fa fa-fw fa-plus"></i> NOWE ZADANIE
+						</a>
+					{% endif %}
+
+					<br/><br/>
+
+					<table class="table table-bordered" style="margin-top: 12px;" id="tasksTable">
+						<thead>
+							<tr>
+								<th width="1%">ID</th>
+								<th width="11%">Nazwa zadania</th>
+								<th width="18%">Przypisane do</th>
+								<th width="10%">Postęp</th>
+								<th width="10%">Status</th>
+								<th width="12%">Data utworzenia</th>
+								<th width="12%">Data zakończenia</th>
+								<th width="32%">Akcja</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% if tasks is defined and tasks is not empty %}
+							{% for task in tasks %}
+								<tr>
+									<td>
+										{{ task.id }}
+									</td>
+									<td>
+										{{ task.name }}
+									</td>
+									<td>
+										{% if task.assignedTo is not empty %}
+											{{ task.assignedTo.firstName }} {{ task.assignedTo.lastName }}
+										{% else %}
+											-- NIEPRZYPISANE --
+										{% endif %}
+									</td>
+									<td>
+										<div class="progress progress-xs">
+											<div class="progress-bar progress-bar-{{ task.statusColors.progress }}" style="width: {{ task.progress }}%"></div>
+										</div>
+									</td>
+									<td>
+										<span class="badge bg-{{ task.statusColors.label }}">
+											{{ task.statusName }} ({{ task.progress }}%)
+										</span>
+									</td>
+									<td>
+										{{ task.createdAt | date("Y-m-d H:i:s") }}
+									</td>
+									<td>
+										{% if task.finishedAt is not empty %}
+											{{ task.finishedAt | date("Y-m-d H:i:s") }}
+										{% else %}
+											------
+										{% endif %}
+
+									</td>
+									<td>
+										<a href="{{ path('app_tasks_change_status', {'id' : task.id}) }}" class="btn btn-primary">
+											<i class="fa fa-fw fa-cogs"></i> ZMIEŃ STATUS
+										</a>
+
+										{% if is_granted("ROLE_ADMIN") %}
+											<a href="{{ path('app_tasks_editor', {'id' : task.id}) }}" class="btn btn-default">
+												<i class="fa fa-fw fa-edit"></i> EDYTUJ
+											</a>
+
+											<a href="{{ path('app_tasks_delete', {'id' : task.id}) }}" class="btn btn-success">
+												<i class="fa fa-fw fa-remove"></i> USUŃ
+											</a>
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="20">
+									{% if is_granted('ROLE_ADMIN') %}
+										Nie utworzono jeszcze żadnych zadań.
+									{% else %}
+										Żadne zadania nie zostały jeszcze przydzielone.
+									{% endif %}
+								</td>
+							</tr>
+						{% endif %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+        $(document).ready(function() {
+            $('#tasksTable').dataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'csv', 'excel', 'pdf'
+                ],
+                "language": {
+                    "processing":     "Przetwarzanie...",
+                    "search":         "Szukaj:",
+                    "lengthMenu":     "Pokaż _MENU_ pozycji",
+                    "info":           "Zadania od _START_ do _END_ z _TOTAL_ łącznie",
+                    "infoEmpty":      "Zadania 0 z 0 dostępnych",
+                    "infoFiltered":   "(filtrowanie spośród _MAX_ dostępnych zadań)",
+                    "infoPostFix":    "",
+                    "loadingRecords": "Wczytywanie...",
+                    "zeroRecords":    "Nie znaleziono pasujących zadań",
+                    "emptyTable":     "Brak danych",
+                    "paginate": {
+                        "first":      "Pierwsza",
+                        "previous":   "Poprzednia",
+                        "next":       "Następna",
+                        "last":       "Ostatnia"
+                    },
+                    "aria": {
+                        "sortAscending": ": aktywuj, by posortować kolumnę rosnąco",
+                        "sortDescending": ": aktywuj, by posortować kolumnę malejąco"
+                    }
+                }
+            });
+        });
+	</script>
+{% endblock %}

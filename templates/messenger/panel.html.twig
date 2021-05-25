@@ -1,0 +1,74 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-9">
+			<div class="box box-success">
+				<div class="box-header">
+					<i class="fa fa-comments-o"></i>
+					<h3 class="box-title">Okienko wiadomości</h3>
+
+					<div class="box-tools">
+						<div class="input-group input-group-sm hidden-xs" style="width: 250px;">
+							<input type="text" id="search-message-input" name="table_search" class="form-control pull-right" placeholder="Wyszukaj...">
+
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default" id="search-message">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 450px;">
+					<div id="messenger-chat" class="box-body chat" id="chat-box" style="overflow-y:scroll; width: auto; height: 450px;">
+
+					</div><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 184.911px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+				<!-- /.chat -->
+				<div class="box-footer">
+					<form enctype="multipart/form-data" id="messenger-form">
+						<div class="input-group">
+							<input class="form-control" name="message" id="message-content" placeholder="Wpisz swoją wiadomość...">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-success" id="send-message">
+									<i class="fa fa-share"></i> Wyślij
+								</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<br/>
+								<input type="file" name="files[]" id="message-files" mutliple accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3">
+			<div class="box box-success">
+				<div class="box-header">
+					<i class="fa fa-users"></i>
+					<h3 class="box-title">Użytkownicy online</h3>
+				</div>
+
+				<div class="row" id="online-users">
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript" src="{{ asset('js/messenger.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+            $('#messenger-chat').messengerWindow({
+                imagesUrlPrefix: '{{ asset('/user_images/') }}'
+            });
+		});
+	</script>
+{% endblock %}
