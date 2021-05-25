@@ -1,0 +1,8 @@
+.navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a>h4,
+.navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a>p {
+    margin: 0 auto;
+}
+
+.navbar-nav >.messages-menu>.dropdown-menu>li .menu>li>a {
+    white-space: normal;
+}
